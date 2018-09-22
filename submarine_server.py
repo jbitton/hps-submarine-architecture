@@ -95,7 +95,6 @@ class GameServer(object):
             self.trench_idx
         )
 
-
         self.decrement_time(submarine_time_spent, trench_time_spent)
 
         m = self.m
