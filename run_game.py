@@ -2,7 +2,8 @@ from multiprocessing import Process
 from time import sleep
 
 from submarine_server import GameServer
-from submarine_clients_template import SubmarineCaptain, TrenchManager
+from clients.submarine_captain_client import SubmarineCaptain
+from clients.trench_manager_client import TrenchManager
 
 def init_submarine_captain(name):
     sleep(1)

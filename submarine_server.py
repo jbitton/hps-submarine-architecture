@@ -114,7 +114,7 @@ class GameServer(object):
 
             if m > 1:
                 submarine_move, submarine_time_spent = self.timed_request(
-                    {'was_probed': times_submarine_probed},
+                    {'times_probed': times_submarine_probed},
                     self.submarine_idx
                 )
 
