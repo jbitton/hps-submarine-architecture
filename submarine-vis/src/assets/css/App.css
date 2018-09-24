@@ -7,12 +7,33 @@
 .sea {
   position: absolute;
   transform: scale(0.3); }
+  .sea .bubble {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #6bafca;
+    opacity: 0.9;
+    animation: bubble1-h-movement 1s ease-in infinite, bubble1-v-movement 300ms ease-in-out infinite alternate, bubble-scale-movement 300ms ease-in-out infinite alternate; }
+    .sea .bubble:after {
+      position: absolute;
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #6bafca;
+      opacity: 0.9; }
+    .sea .bubble:after {
+      top: -20;
+      left: 100px;
+      width: 9px;
+      height: 9px; }
   .sea .circle-wrapper {
     position: relative;
     background: linear-gradient(#2c647a, #204858);
     width: 300px;
     height: 300px;
-    margin: 10px 10px 0 10px;
+    margin: 10px auto 0 auto;
     overflow: hidden;
     z-index: 0;
     border-radius: 50%;
@@ -23,7 +44,7 @@
     width: 300px;
     padding: 30px 50px 30px 150px;
     margin: 0 auto 0 auto;
-    transform: rotate(0deg); }
+    animation: diving 3s ease-in-out infinite, diving-rotate 3s ease-in-out infinite; }
     .sea .submarine-wrapper .submarine-body {
       width: 150px;
       height: 80px;
@@ -86,6 +107,7 @@
           content: "";
           border-radius: 2px;
           background-color: white;
+          animation: spin 900ms linear infinite;
           opacity: 0.8; }
         .sea .submarine-wrapper .submarine-body .engine:after {
           top: 8px;
@@ -115,7 +137,8 @@
         background-color: transparent;
         opacity: 0.8;
         background: linear-gradient(to bottom, #D93A54, #D93A54 50%, #e57a8c 50%, #e57a8c);
-        background-size: 100% 20px; }
+        background-size: 100% 20px;
+        animation: helix-movement 110ms linear infinite; }
     .sea .submarine-wrapper .hat {
       width: 65px;
       height: 25px;
@@ -156,7 +179,8 @@
           width: 5px;
           height: 5px;
           border-radius: 50%;
-          background-color: white; }
+          background-color: white;
+          animation: leds-off 500ms linear infinite; }
           .sea .submarine-wrapper .hat .leds-wrapper .leds:after, .sea .submarine-wrapper .hat .leds-wrapper .leds:before {
             content: "";
             position: absolute;
@@ -170,3 +194,72 @@
           .sea .submarine-wrapper .hat .leds-wrapper .leds:before {
             margin-top: 0px;
             margin-left: 34px; }
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg); } }
+
+@keyframes leds-off {
+  100% {
+    opacity: 0.3; } }
+
+@keyframes helix-movement {
+  100% {
+    background: linear-gradient(to bottom, #e57a8c 50%, #e57a8c, #D93A54, #D93A54 50%);
+    background-size: 100% 20px; } }
+
+@keyframes diving {
+  0% {
+    margin-top: 5px; }
+  50% {
+    margin-top: 15px; }
+  100% {
+    margin-top: 5px; } }
+
+@keyframes diving-rotate {
+  0% {
+    transform: rotate(0deg); }
+  50% {
+    transform: rotate(3deg); }
+  75% {
+    transform: rotate(-2deg); }
+  100% {
+    transform: rotate(0deg); } }
+
+@keyframes bubble1-h-movement {
+  0% {
+    margin-left: 80%; }
+  100% {
+    margin-left: -100%; } }
+
+@keyframes bubble2-h-movement {
+  0% {
+    margin-left: 65%; }
+  100% {
+    margin-left: -5%; } }
+
+@keyframes bubble1-v-movement {
+  0% {
+    margin-top: 115px; }
+  100% {
+    margin-top: 160px; } }
+
+@keyframes bubble2-v-movement {
+  0% {
+    margin-top: 115px; }
+  100% {
+    margin-top: 90px; } }
+
+@keyframes bubble-scale-movement {
+  0% {
+    transform: scale(1.4); }
+  100% {
+    transform: scale(0.9); } }
+
+@keyframes light-movement {
+  0% {
+    transform: rotate(-40deg); }
+  50% {
+    transform: rotate(-70deg); }
+  100% {
+    transform: rotate(-40deg); } }
