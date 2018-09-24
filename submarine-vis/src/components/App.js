@@ -1,40 +1,10 @@
 import React, { Component } from 'react';
 import '../assets/css/App.css';
+import { Donut } from '../assets/donut';
 
-const CircularTrench = (props) => (
-  <svg className="donut" width="51.5%" height="51.5%" viewBox="0 0 42 42">
-    <circle
-      className="donut-hole"
-      cx="21"
-      cy="21"
-      r="15.91549430918954" 
-      fill="#fff"
-    />
-    <circle
-      className="donut-ring" 
-      cx="21"
-      cy="21"
-      r="15.91549430918954"
-      fill="transparent" 
-      stroke="#ef0e0e" 
-      strokeWidth="3"
-    />
-    <circle
-      className="donut-segment"
-      cx="21"
-      cy="21" 
-      r="15.91549430918954" 
-      fill="transparent" 
-      stroke="#efdc0e" 
-      strokeWidth="3"
-      strokeDasharray="95 5" 
-      strokeDashoffset={20 + (100 - props.start)}
-    />
-  </svg>
-);
 
-const Submarine = () => (
-  <div className="sea" style={{left: 27.5, top: 60}}>
+const Submarine = (props) => (
+  <div className="sea" style={{left: (-115 + 375 - 45 + 30) + (375 - 28.125) * Math.cos(((props.pos - 25)/100) * 360 * Math.PI / 180), top: (-111 + 375 - 45 + 30) + (375 - 28.125) * Math.sin(((props.pos - 25)/100) * 360 * Math.PI / 180)}}>
     <div className="circle-wrapper">
       <div className="submarine-wrapper">
         <div className="submarine-body">
@@ -58,8 +28,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <CircularTrench start={0}/>
-        <Submarine/>
+        <Donut start={0}/>
+        <Submarine pos={50}/>
       </div>
     );
   }
