@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Websocket from 'react-websocket';
 import { Donut } from './Donut.react';
 import { Submarine, Probe } from './Submarine.react';
 import StatsTable from './StatsTable.react';
@@ -16,11 +17,22 @@ class App extends Component {
       isSafetyConditionAchieved: true,
       submarineRegion: 'red',
       trenchAlert: 'red',
-      probes: [1, 4, 7],
+      probes: [],
     };
   }
 
-  // TODO: have a function that talks to the server for game stats
+  handleData(data) {
+    let result = JSON.parse(data);
+    console.log(result)
+    this.setState({
+      redRegion: result.red_region,
+      position: result.position,
+      isSafetyConditionAchieved: result.is_safety_condition_achieved,
+      submarineRegion: result.submarine_region,
+      trenchAlert: result.trench_alert,
+      probes: result.probes,
+    });
+  }
 
   render() {
     return (
@@ -31,6 +43,10 @@ class App extends Component {
           <Submarine pos={this.state.position}/>
           {this.state.probes.map(position => <Probe pos={position}/>)}
           <StatsTable {...this.state}/>
+          <Websocket
+            url='ws://localhost:8000'
+            onMessage={this.handleData.bind(this)}
+          />
         </div>
       </div>
     );

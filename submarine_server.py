@@ -2,10 +2,16 @@ import json
 from random import randint
 from time import time
 
+import asyncio
+import websockets
+
 from hps.servers import SocketServer
 
 HOST = '127.0.0.1'
 PORT = 5000
+
+WEB_HOST = '127.0.0.1'
+WEB_PORT = 8000
 
 class GameServer(object):
     def __init__(self, d=36, y=6, r=6, m=10, L=4, p=2):
@@ -26,6 +32,8 @@ class GameServer(object):
         self.player_attributes = [json.loads(info) for info in self.server.receive_from_all()]
         self.trench_idx = 0 if self.player_attributes[0]['is_trench_manager'] else 1
         self.submarine_idx = 1 if self.player_attributes[0]['is_trench_manager'] else 0
+        self.web_server = SocketServer(WEB_HOST, WEB_PORT, 2)
+        self.web_server.establish_client_connections()
         
 
     def timed_request(self, request_data, client_idx):
@@ -90,7 +98,7 @@ class GameServer(object):
             self.submarine_idx
         )
 
-        trench_move, trench_time_spent = self.timed_request(
+        trench_probe_move, trench_time_spent = self.timed_request(
             {'d': self.d, 'y': self.y, 'r': self.r, 'm': self.m, 'L': self.L, 'p': self.p},
             self.trench_idx
         )
@@ -103,7 +111,7 @@ class GameServer(object):
 
             self.complete_submarine_move(submarine_move['move'])
 
-            probe_results, times_submarine_probed = self.deploy_probes(trench_move['probes'])
+            probe_results, times_submarine_probed = self.deploy_probes(trench_probe_move['probes'])
 
             trench_move, trench_time_spent = self.timed_request(
                 {'probe_results': probe_results},
@@ -112,13 +120,22 @@ class GameServer(object):
 
             self.trench_region_check(trench_move['region'])
 
+            self.web_server.send_to_all(json.dumps({
+                'red_region': self.d,
+                'position': self.submarine_location,
+                'is_safety_condition_achieved': self.trench_condition_achieved,
+                'submarine_region': 'red' if self.is_submarine_in_red else 'yellow',
+                'trench_alert': trench_move['region'],
+                'probes': trench_probe_move['probes']
+            }))
+
             if m > 1:
                 submarine_move, submarine_time_spent = self.timed_request(
                     {'was_probed': times_submarine_probed},
                     self.submarine_idx
                 )
 
-                trench_move, trench_time_spent = self.timed_request(
+                trench_probe_move, trench_time_spent = self.timed_request(
                     {},
                     self.trench_idx
                 )
