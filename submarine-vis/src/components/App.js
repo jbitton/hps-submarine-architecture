@@ -1,36 +1,37 @@
 import React, { Component } from 'react';
+import { Donut } from './Donut.react';
+import { Submarine, Probe } from './Submarine.react';
+import StatsTable from './StatsTable.react';
+import SubmarineAppBar from './SubmarineAppBar.react';
 import '../assets/css/App.css';
-import { Donut } from '../assets/donut';
 
-
-const Submarine = (props) => (
-  <div className="sea" style={{left: (-115 + 375 - 45 + 30) + (375 - 28.125) * Math.cos(((props.pos - 25)/100) * 360 * Math.PI / 180), top: (-111 + 375 - 45 + 30) + (375 - 28.125) * Math.sin(((props.pos - 25)/100) * 360 * Math.PI / 180)}}>
-    <div class="circle-wrapper">
-      <div class="bubble"></div>
-      <div class="submarine-wrapper">
-        <div class="submarine-body">
-          <div class="window"></div>
-          <div class="engine"></div>
-          <div class="light"></div>
-        </div>
-        <div class="helix"></div>
-        <div class="hat">
-          <div class="leds-wrapper">
-            <div class="periscope"></div>
-            <div class="leds"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)
 
 class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      redRegion: 0,
+      position: 0,
+      isSafetyConditionAchieved: true,
+      submarineRegion: 'red',
+      trenchAlert: 'red',
+      probes: [1, 4, 7],
+    };
+  }
+
+  // TODO: have a function that talks to the server for game stats
+
   render() {
     return (
       <div>
-        <Donut start={0}/>
-        <Submarine pos={50}/>
+        <SubmarineAppBar/>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <Donut start={this.state.redRegion}/>
+          <Submarine pos={this.state.position}/>
+          {this.state.probes.map(position => <Probe pos={position}/>)}
+          <StatsTable {...this.state}/>
+        </div>
       </div>
     );
   }

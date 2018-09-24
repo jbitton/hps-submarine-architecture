@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toRadians } from '../assets/util';
 
 class Donut extends Component {
   componentDidMount() {
@@ -9,13 +10,9 @@ class Donut extends Component {
     this.draw(canvas, canvas.getContext('2d'), ['#ef0e0e', '#efdc0e']);
   }
 
-  toRadians(degrees) {
-    return degrees * Math.PI / 180;
-  }
-
   draw(canvas, context, colors) {
     const totalValue = 100;
-    let startAngle = this.toRadians(((this.props.start - 25) / 100) * 360);
+    let startAngle = toRadians(((this.props.start - 25) / 100) * 360);
 
     const redSliceAngle = 2 * Math.PI * 6 / totalValue;
     

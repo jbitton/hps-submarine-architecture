@@ -2,6 +2,32 @@
     margin: 30px;
 }
 
+.needle {
+    position: absolute;
+    width: 2.5em;
+    height: 0.1em;
+    border-radius: 3px;
+    background: #a09b9b;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+    transform-origin: 0 0;
+    top: 6.7em;
+    left: 6em;
+    transform-origin: left;
+    transform: rotate(90deg);
+  
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0.7em;
+      height: 0.7em;
+      border-radius: 50%;
+      background: #b51515;
+      box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+      top: -0.3em;
+      left: -0.3em;
+    }
+  }
+
 $color1: #306D85;
 $color2: #D93A54;
 
