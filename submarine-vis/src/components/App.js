@@ -50,7 +50,7 @@ class App extends Component {
     this.setState({turns})
     console.log(turns)
   }
- 
+
   render() {
     return (
       <div>

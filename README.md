@@ -32,10 +32,10 @@ Under the `clients` folder you will find three files. You should only care about
 
 If you want to test out various initial game state values, you only need to modify one line of code.
 
-In `run_game.py` on line 24, I initialize `controller = GameServer()`. To change the game state, inject any of the following parameters into `GameServer`: `d, y, r, m, L, and/or p`.
+In `run_game.py` on line 24, I initialize `controller = GameServer()`. To change the game state, inject any of the following parameters into `GameServer`: `d, y, r, m, L, p, and/or gui`.
 
 ```
-controller = GameServer(d=45, y=10, r=50, m=3, L=10, p=3)
+controller = GameServer(d=45, y=10, r=50, m=3, L=10, p=3, gui=False)
 ```
 
 ## Running the Web Application
@@ -47,5 +47,11 @@ Okay, so you want to see the awesome UI. It's stored under the `submarine-vis` f
 3. `cd` into `submarine-vis`
 4. Run `yarn install`. This will install all of the needed node dependencies
 5. Afterwards, run `yarn start` and the app should open up in a new tab. It's hosted on `localhost:3000`
+6. To have the GameServer provide an endpoint pass `True` to the gui optional parameter. ie. `GameServer(gui=True)`. This will provide an endpoint on `localhost:8000`
 
-**NOTE**: As of now, the web application does _not_ connect to the game server. I'm having some issues with sockets in React. A possible approach is currently in the branch `feature/possible-websocket`, but it doesn't work yet. I'll merge the branch as soon as the issue is fixed and will send an announcement to the class.
+**TIPS**:
+The players will not be allowed to connect until the gui has connected to the GameServer. This means you should change your `run_server.py` to sleep for a longer amount of time prior to connecting to the game server.
+
+You will manually have to open the gui in a browser by going to the address `localhost:8000`... assuming you're running the react app on your computer. You could also run both of your clients independantly and connect to the game server after you connect the gui.
+
+**NOTE**: Zach fixed the connection. You're most welcome. :turtle:
