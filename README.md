@@ -9,7 +9,7 @@ There are multiple parts to this project:
 ## Setup Client / Server Code
 
 1. This project uses `python3.6`. If you haven't already, please install it.
-2. Download the SocketServer/SocketClient code: `pip install --user hps-nyu` (only external dependency)
+2. Download dependencies: `pip install -r requirements.txt` 
 3. `cd` into this project on your machine and run `python3.6 run_game.py`
 
 You should see some output that looks similar to this:
