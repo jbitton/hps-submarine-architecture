@@ -18,37 +18,40 @@ class App extends Component {
       submarineRegion: 'yellow',
       trenchAlert: 'red',
       probes: [],
-      turns: [],
+      gamestates: [],
+      interval: undefined,
     };
   }
 
   componentDidMount() {
-    this.interval = setInterval(() => {
-      let turn = this.state.turns.shift()
-      if (turn !== undefined) {
-        this.setState({
-          redRegion: turn.red_region,
-          position: turn.position,
-          isSafetyConditionAchieved: turn.is_safety_condition_achieved,
-          submarineRegion: turn.submarine_region,
-          trenchAlert: turn.trench_alert,
-          probes: turn.probes,
-        })
-      }
-    }, 1000
-  )}
+    this.setState({
+        interval: setInterval(() => {
+          const gamestate = this.state.gamestates.shift()
+          if (gamestate !== undefined) {
+            this.setState({
+              redRegion: gamestate.red_region,
+              position: gamestate.position,
+              isSafetyConditionAchieved: gamestate.is_safety_condition_achieved,
+              submarineRegion: gamestate.submarine_region,
+              trenchAlert: gamestate.trench_alert,
+              probes: gamestate.probes,
+            })
+          }
+        }, 1000)
+    })
+  }
 
   componentWillUnmount() {
-    clearInterval(this.interval)
+    if (this.state.interval !== undefined) {
+      clearInterval(this.state.interval)
+    }
   }
 
   handleData(data) {
-    let turn = JSON.parse(data)
-    console.log(turn)
-    var turns = [...this.state.turns]
-    turns.push(turn)
-    this.setState({turns})
-    console.log(turns)
+    const gamestate = JSON.parse(data)
+    var gamestates = [...this.state.gamestates]
+    gamestates.push(gamestate)
+    this.setState({gamestates})
   }
 
   render() {

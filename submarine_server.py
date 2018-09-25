@@ -24,17 +24,17 @@ class GameServer(object):
         self.red_alert = [i % 100 for i in range(d, d+6)]
         self.submarine_time_left = self.trench_time_left = 120
         self.submarine_location = randint(0, 99)
-        print('Waitin on port %s for players...' % PORT)
+        self.is_submarine_in_red = self.submarine_location in self.red_alert
+        print('Waiting on port %s for players...' % PORT)
         if gui:
-            self.is_submarine_in_red = self.submarine_location in self.red_alert
             self.web_server = WebsocketServer(WEB_PORT, host=WEB_HOST)
-            self.web_server.new_client = self.front_end_connected
+            self.web_server.new_client = self.accept_player_connections
             self.web_server.run_forever()
         else:
-            self.front_end_connected()
+            self.accept_player_connections()
 
 
-    def front_end_connected(self, front_end=None, web_server=None):
+    def accept_player_connections(self, front_end=None, web_server=None):
         if front_end:
             print('~~ WE GOT A FRONT END ~~')
         self.server = SocketServer(HOST, PORT, 2)
