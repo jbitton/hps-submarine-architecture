@@ -2,7 +2,6 @@ import json
 from random import randint
 from time import time
 
-
 from hps.servers import SocketServer
 from websocket_server import WebsocketServer
 
@@ -13,7 +12,7 @@ WEB_HOST = '127.0.0.1'
 WEB_PORT = 8000
 
 class GameServer(object):
-    def __init__(self, d=36, y=6, r=6, m=10, L=4, p=2):
+    def __init__(self, d=36, y=6, r=6, m=10, L=4, p=2, gui=False):
         self.d = d
         self.y = y
         self.r = r
@@ -25,14 +24,19 @@ class GameServer(object):
         self.red_alert = [i % 100 for i in range(d, d+6)]
         self.submarine_time_left = self.trench_time_left = 120
         self.submarine_location = randint(0, 99)
-        self.is_submarine_in_red = self.submarine_location in self.red_alert
+        print('Waitin on port %s for players...' % PORT)
+        if gui:
+            self.is_submarine_in_red = self.submarine_location in self.red_alert
+            self.web_server = WebsocketServer(WEB_PORT, host=WEB_HOST)
+            self.web_server.new_client = self.front_end_connected
+            self.web_server.run_forever()
+        else:
+            self.front_end_connected()
 
-        self.web_server = WebsocketServer(WEB_PORT, host=WEB_HOST)
-        self.web_server.new_client = (lambda client, self: self.fron_end_connected())
-        self.web_server.run_forever()
 
-
-    def front_end_connected(self):
+    def front_end_connected(self, front_end=None, web_server=None):
+        if front_end:
+            print('~~ WE GOT A FRONT END ~~')
         self.server = SocketServer(HOST, PORT, 2)
         self.server.establish_client_connections()
         self.player_attributes = [json.loads(info) for info in self.server.receive_from_all()]

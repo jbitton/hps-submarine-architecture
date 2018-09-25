@@ -18,22 +18,39 @@ class App extends Component {
       submarineRegion: 'red',
       trenchAlert: 'red',
       probes: [],
+      turns: [],
     };
   }
 
-  handleData(data) {
-    let result = JSON.parse(data);
-    console.log(result)
-    this.setState({
-      redRegion: result.red_region,
-      position: result.position,
-      isSafetyConditionAchieved: result.is_safety_condition_achieved,
-      submarineRegion: result.submarine_region,
-      trenchAlert: result.trench_alert,
-      probes: result.probes,
-    });
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      let turn = this.state.turns.shift()
+      if (turn !== undefined) {
+        this.setState({
+          redRegion: turn.red_region,
+          position: turn.position,
+          isSafetyConditionAchieved: turn.is_safety_condition_achieved,
+          submarineRegion: turn.submarine_region,
+          trenchAlert: turn.trench_alert,
+          probes: turn.probes,
+        })
+      }
+    }, 1000
+  )}
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 
+  handleData(data) {
+    let turn = JSON.parse(data)
+    console.log(turn)
+    var turns = [...this.state.turns]
+    turns.push(turn)
+    this.setState({turns})
+    console.log(turns)
+  }
+ 
   render() {
     return (
       <div>

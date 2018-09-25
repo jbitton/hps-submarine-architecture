@@ -5,12 +5,12 @@ from submarine_server import GameServer
 from submarine_clients_template import SubmarineCaptain, TrenchManager
 
 def init_submarine_captain(name):
-    sleep(5)
+    sleep(1)
     player = SubmarineCaptain(name=name)
     player.play_game()
 
 def init_trench_manager(name):
-    sleep(5)
+    sleep(1)
     player = TrenchManager(name=name)
     player.play_game()
 
