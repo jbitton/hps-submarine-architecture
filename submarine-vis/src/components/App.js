@@ -12,10 +12,10 @@ class App extends Component {
     super();
 
     this.state = {
-      redRegion: 0,
+      redRegion: 5,
       position: 0,
       isSafetyConditionAchieved: true,
-      submarineRegion: 'red',
+      submarineRegion: 'yellow',
       trenchAlert: 'red',
       probes: [],
       turns: [],

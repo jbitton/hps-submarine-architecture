@@ -138,9 +138,18 @@ class GameServer(object):
                 'probes': trench_probe_move['probes']
             }))
 
+            print("**********************************************")
+            print(f"Submarine moved by {submarine_move['move']} (current position: {self.submarine_location})")
+            print(f"Submarine is {'not' if not self.is_submarine_in_red else ''} in red region")
+            print(f"Probes were placed at {trench_probe_move['probes']}")
+            print(f"The results were: {probe_results}")
+            print(f"Trench manager sent {trench_move['region']} alert")
+            print(f"Safety condition {'not' if not self.trench_condition_achieved else ''} achieved")
+            print("**********************************************")
+
             if m > 1:
                 submarine_move, submarine_time_spent = self.timed_request(
-                    {'was_probed': times_submarine_probed},
+                    {'times_probed': times_submarine_probed},
                     self.submarine_idx
                 )
 
