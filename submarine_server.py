@@ -25,6 +25,7 @@ class GameServer(object):
         self.submarine_time_left = self.trench_time_left = 120
         self.submarine_location = randint(0, 99)
         self.is_submarine_in_red = self.submarine_location in self.red_alert
+        self.web_server = None
         print('Waiting on port %s for players...' % PORT)
         if gui:
             self.web_server = WebsocketServer(WEB_PORT, host=WEB_HOST)
@@ -129,14 +130,15 @@ class GameServer(object):
 
             self.trench_region_check(trench_move['region'])
 
-            self.web_server.send_message_to_all(json.dumps({
-                'red_region': self.d,
-                'position': self.submarine_location,
-                'is_safety_condition_achieved': self.trench_condition_achieved,
-                'submarine_region': 'red' if self.is_submarine_in_red else 'yellow',
-                'trench_alert': trench_move['region'],
-                'probes': trench_probe_move['probes']
-            }))
+            if self.web_server:
+                self.web_server.send_message_to_all(json.dumps({
+                    'red_region': self.d,
+                    'position': self.submarine_location,
+                    'is_safety_condition_achieved': self.trench_condition_achieved,
+                    'submarine_region': 'red' if self.is_submarine_in_red else 'yellow',
+                    'trench_alert': trench_move['region'],
+                    'probes': trench_probe_move['probes']
+                }))
 
             print("**********************************************")
             print(f"Submarine moved by {submarine_move['move']} (current position: {self.submarine_location})")

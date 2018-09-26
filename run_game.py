@@ -6,12 +6,12 @@ from clients.submarine_captain_client import SubmarineCaptain
 from clients.trench_manager_client import TrenchManager
 
 def init_submarine_captain(name):
-    sleep(5)
+    sleep(1)
     player = SubmarineCaptain(name=name)
     player.play_game()
 
 def init_trench_manager(name):
-    sleep(5)
+    sleep(1)
     player = TrenchManager(name=name)
     player.play_game()
 
@@ -21,7 +21,7 @@ def main():
     player_2 = Process(target=init_trench_manager, args=('Manager Zach',))
     player_2.start()
 
-    controller = GameServer(gui=True)
+    controller = GameServer()
 
 if __name__ == '__main__':
     main()
