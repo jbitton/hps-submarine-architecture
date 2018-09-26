@@ -18,7 +18,7 @@ class App extends Component {
       submarineRegion: 'yellow',
       trenchAlert: 'red',
       probes: [],
-      gamestates: [],
+      gameStates: [],
       interval: undefined,
     };
   }
@@ -26,32 +26,32 @@ class App extends Component {
   componentDidMount() {
     this.setState({
         interval: setInterval(() => {
-          const gamestate = this.state.gamestates.shift()
-          if (gamestate !== undefined) {
+          const gameState = this.state.gameStates.shift();
+          if (gameState !== undefined) {
             this.setState({
-              redRegion: gamestate.red_region,
-              position: gamestate.position,
-              isSafetyConditionAchieved: gamestate.is_safety_condition_achieved,
-              submarineRegion: gamestate.submarine_region,
-              trenchAlert: gamestate.trench_alert,
-              probes: gamestate.probes,
-            })
+              redRegion: gameState.red_region,
+              position: gameState.position,
+              isSafetyConditionAchieved: gameState.is_safety_condition_achieved,
+              submarineRegion: gameState.submarine_region,
+              trenchAlert: gameState.trench_alert,
+              probes: gameState.probes,
+            });
           }
         }, 1000)
-    })
+    });
   }
 
   componentWillUnmount() {
     if (this.state.interval !== undefined) {
-      clearInterval(this.state.interval)
+      clearInterval(this.state.interval);
     }
   }
 
   handleData(data) {
-    const gamestate = JSON.parse(data)
-    var gamestates = [...this.state.gamestates]
-    gamestates.push(gamestate)
-    this.setState({gamestates})
+    const gameState = JSON.parse(data);
+    const { gameStates } = this.state;
+    gameStates.push(gameState);
+    this.setState({gameStates});
   }
 
   render() {

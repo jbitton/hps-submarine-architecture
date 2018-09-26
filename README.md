@@ -52,4 +52,4 @@ Okay, so you want to see the awesome UI. It's stored under the `submarine-vis` f
 **TIPS**:
 The players will not be allowed to connect until the gui has connected to the GameServer. This means you should change your `run_server.py` to sleep for a longer amount of time prior to connecting to the game server.
 
-You will independantly open the gui in a browser by going to the address `localhost:8000`... assuming you're running the react app on your computer. You could also run both of your clients independantly and connect to the game server after you connect the gui.
+You can independently open the gui in a browser by going to the address `localhost:8000`... assuming you're running the react app on your computer. You could also run both of your clients independently and connect to the game server after you connect the gui.
