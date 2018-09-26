@@ -127,7 +127,7 @@ class GameServer(object):
                     self.submarine_idx
                 )
 
-                trench_move, trench_time_spent = self.timed_request(
+                trench_probe_move, trench_time_spent = self.timed_request(
                     {},
                     self.trench_idx
                 )

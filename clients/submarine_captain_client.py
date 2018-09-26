@@ -24,6 +24,7 @@ class SubmarineCaptain(Player):
                 print(f"The trench manager's final cost is: {response['trench_cost']}. " +
                       f"The safety condition {'was' if response['was_condition_achieved'] else 'was not'} satisfied.")
                 exit(0)
+            self.m -= 1
 
     def your_algorithm(self, times_probed):
         """

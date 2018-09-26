@@ -27,6 +27,7 @@ class TrenchManager(Player):
                 print(f"Your final cost is: {response['trench_cost']}. " +
                       f"The safety condition {'was' if response['was_condition_achieved'] else 'was not'} satisfied.")
                 exit(0)
+            self.m -= 1
 
     def send_probes(self):
         """
