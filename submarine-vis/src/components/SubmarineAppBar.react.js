@@ -22,7 +22,7 @@ function SubmarineAppBar(props) {
         <AppBar position="static" style={{backgroundColor: '#d80d0d'}}>
           <Toolbar>
             <Typography variant="title" color="inherit" className={classes.grow}>
-                Submarine Alert
+                The Hunt for the Red October
             </Typography>
           </Toolbar>
         </AppBar>

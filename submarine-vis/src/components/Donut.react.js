@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toRadians } from '../assets/util';
 
 class Donut extends Component {
-  componentDidMount() {
+  componentDidUpdate() {
     const canvas = document.getElementById('donut');
     canvas.width = 750;
     canvas.height = 750;

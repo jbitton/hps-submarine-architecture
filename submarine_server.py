@@ -3,12 +3,16 @@ from random import randint
 from time import time
 
 from hps.servers import SocketServer
+from websocket_server import WebsocketServer
 
 HOST = '127.0.0.1'
 PORT = 5000
 
+WEB_HOST = '127.0.0.1'
+WEB_PORT = 8000
+
 class GameServer(object):
-    def __init__(self, d=36, y=6, r=6, m=10, L=4, p=2):
+    def __init__(self, d=36, y=6, r=6, m=10, L=4, p=2, gui=False):
         self.d = d
         self.y = y
         self.r = r
@@ -21,12 +25,26 @@ class GameServer(object):
         self.submarine_time_left = self.trench_time_left = 120
         self.submarine_location = randint(0, 99)
         self.is_submarine_in_red = self.submarine_location in self.red_alert
+        self.web_server = None
+        print('Waiting on port %s for players...' % PORT)
+        if gui:
+            self.web_server = WebsocketServer(WEB_PORT, host=WEB_HOST)
+            self.web_server.new_client = self.accept_player_connections
+            self.web_server.run_forever()
+        else:
+            self.accept_player_connections()
+
+
+    def accept_player_connections(self, front_end=None, web_server=None):
+        if front_end:
+            print('~~ WE GOT A FRONT END ~~')
         self.server = SocketServer(HOST, PORT, 2)
         self.server.establish_client_connections()
         self.player_attributes = [json.loads(info) for info in self.server.receive_from_all()]
         self.trench_idx = 0 if self.player_attributes[0]['is_trench_manager'] else 1
         self.submarine_idx = 1 if self.player_attributes[0]['is_trench_manager'] else 0
-        
+        self.play_game()
+
 
     def timed_request(self, request_data, client_idx):
         self.server.send_to(json.dumps(request_data), client_idx)
@@ -51,7 +69,7 @@ class GameServer(object):
 
     def complete_submarine_move(self, submarine_move):
         if type(submarine_move) != int or submarine_move > 1 or submarine_move < -1:
-                raise ValueError('Submarine Captain made an illegal move')
+            raise ValueError('Submarine Captain made an illegal move')
 
         self.submarine_location = (self.submarine_location + submarine_move) % 100
         self.is_submarine_in_red = self.submarine_location in self.red_alert
@@ -73,7 +91,7 @@ class GameServer(object):
         for probe in probes:
             if type(probe) != int or probe < 0 or probe > 99:
                 raise ValueError('Trench Manager placed a probe at an illegal position')
-            
+
             range_start = (probe - self.L) if (probe - self.L) > 0 else (100 + (probe - self.L))
             probe_range = [i % 100 for i in range(range_start, range_start + (self.L * 2) + 1)]
 
@@ -112,6 +130,16 @@ class GameServer(object):
 
             self.trench_region_check(trench_move['region'])
 
+            if self.web_server:
+                self.web_server.send_message_to_all(json.dumps({
+                    'red_region': self.d,
+                    'position': self.submarine_location,
+                    'is_safety_condition_achieved': self.trench_condition_achieved,
+                    'submarine_region': 'red' if self.is_submarine_in_red else 'yellow',
+                    'trench_alert': trench_move['region'],
+                    'probes': trench_probe_move['probes']
+                }))
+
             print("**********************************************")
             print(f"Submarine moved by {submarine_move['move']} (current position: {self.submarine_location})")
             print(f"Submarine is {'not' if not self.is_submarine_in_red else ''} in red region")
@@ -141,8 +169,8 @@ class GameServer(object):
 
         self.server.send_to_all(
             json.dumps({
-                'game_over': True, 
-                'trench_cost': self.trench_cost, 
+                'game_over': True,
+                'trench_cost': self.trench_cost,
                 'was_condition_achieved': self.trench_condition_achieved
             })
         )

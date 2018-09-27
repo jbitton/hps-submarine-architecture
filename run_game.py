@@ -41,7 +41,6 @@ def main():
     player_2.start()
 
     controller = GameServer()
-    controller.play_game()
 
 if __name__ == '__main__':
     main()
